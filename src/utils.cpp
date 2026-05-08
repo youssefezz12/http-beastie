@@ -7,6 +7,7 @@ namespace beast = boost::beast;
 namespace http = beast::http;
 
 std::string read_file(const std::string& path) {
+
   std::ifstream myfile(path);
 
   if (!myfile.is_open()) {
@@ -39,11 +40,19 @@ http::response<http::string_body> handle_request(
     if (req.target() == "/") {
 
       res.result(http::status::ok);
+
       res.body() = read_file("../static/index.html");
+
+    } else if (req.target() == "/ezz") {
+
+      res.result(http::status::ok);
+
+      res.body() = read_file("../static/ezz.html");
 
     } else {
 
       res.result(http::status::not_found);
+
       res.body() =
           "<h1 style=\"text-align: center;\">404 Not Found</h1>";
     }
@@ -51,7 +60,9 @@ http::response<http::string_body> handle_request(
   } else {
 
     res.result(http::status::method_not_allowed);
+
     res.set(http::field::allow, "GET");
+
     res.body() =
         "<h1 style=\"text-align: center;\">405 Method Not Allowed</h1>";
   }
